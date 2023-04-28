@@ -1,20 +1,23 @@
 package apitests;
 
+import api.Condition;
 import api.Content;
+import api.Order;
 import api.ResponseMessage;
 import api.Root;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.testng.annotations.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+
+import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
+import static utils.Serialization.buildRequest;
 
 public class BaseAPITest {
 
-    protected Logger log = LogManager.getRootLogger();
     protected Response response;
     protected Root root;
     protected Content content;
@@ -28,8 +31,31 @@ public class BaseAPITest {
         RestAssured.basePath = "/api/v1";
     }
 
-    @BeforeClass(alwaysRun = true)
-    public void createFilter() {
+    @BeforeAll
+    public void createFilter() throws JsonProcessingException {
+        ArrayList<Condition> conditions = new ArrayList<>();
+        conditions.add(new Condition.ConditionBuilder()
+                               .setCondition("cnt")
+                               .setFilteringField("name")
+                               .setValue("value")
+                               .build());
+        ArrayList<Order> orders = new ArrayList<>();
+        orders.add(new Order.OrderBuilder()
+                           .setAsc(true)
+                           .setSortingColumn("startTime")
+                           .build());
+        root = new Root.RootBuilder()
+                .setName("Emma456")
+                .setDescription("description")
+                .setShare(true)
+                .setType("launch")
+                .setConditions(conditions)
+                .setOrders(orders)
+                .build();
+        response = sendPostRequest(buildRequest(root), "/" + projectName + "/filter");
+
+        Root root = sendGetByNameRequest(projectName + "/filter/names", "Emma456").as(Root.class);
+        id = root.getContent().get(0).getId();
     }
 
     public Response sendPostRequest(Object body, String endpoint) {
