@@ -1,5 +1,7 @@
 package apitests;
 
+import java.util.ArrayList;
+
 import api.Condition;
 import api.Content;
 import api.Order;
@@ -9,9 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeAll;
-
-import java.util.ArrayList;
+import org.junit.BeforeClass;
 
 import static io.restassured.RestAssured.given;
 import static utils.Serialization.buildRequest;
@@ -31,21 +31,18 @@ public class BaseAPITest {
         RestAssured.basePath = "/api/v1";
     }
 
-    @BeforeAll
+    @BeforeClass
     public void createFilter() throws JsonProcessingException {
         ArrayList<Condition> conditions = new ArrayList<>();
-        conditions.add(new Condition.ConditionBuilder()
-                               .setCondition("cnt")
+        conditions.add(new Condition.ConditionBuilder().setCondition("cnt")
                                .setFilteringField("name")
                                .setValue("value")
                                .build());
         ArrayList<Order> orders = new ArrayList<>();
-        orders.add(new Order.OrderBuilder()
-                           .setAsc(true)
+        orders.add(new Order.OrderBuilder().setAsc(true)
                            .setSortingColumn("startTime")
                            .build());
-        root = new Root.RootBuilder()
-                .setName("Emma456")
+        root = new Root.RootBuilder().setName("Emma456")
                 .setDescription("description")
                 .setShare(true)
                 .setType("launch")
@@ -55,12 +52,13 @@ public class BaseAPITest {
         response = sendPostRequest(buildRequest(root), "/" + projectName + "/filter");
 
         Root root = sendGetByNameRequest(projectName + "/filter/names", "Emma456").as(Root.class);
-        id = root.getContent().get(0).getId();
+        id = root.getContent()
+                .get(0)
+                .getId();
     }
 
     public Response sendPostRequest(Object body, String endpoint) {
-        return given()
-                .contentType(ContentType.JSON)
+        return given().contentType(ContentType.JSON)
                 .header("Authorization", "Bearer ca0b2430-524c-48cd-8cca-765216212f47")
                 .when()
                 .body(body)
@@ -68,24 +66,21 @@ public class BaseAPITest {
     }
 
     public Response sendGetRequest(String endpoint) {
-        return given()
-                .contentType(ContentType.JSON)
+        return given().contentType(ContentType.JSON)
                 .header("Authorization", "Bearer ca0b2430-524c-48cd-8cca-765216212f47")
                 .when()
                 .get(endpoint);
     }
 
     public Response sendDeleteRequest(String endpoint) {
-        return given()
-                .contentType(ContentType.JSON)
+        return given().contentType(ContentType.JSON)
                 .header("Authorization", "Bearer ca0b2430-524c-48cd-8cca-765216212f47")
                 .when()
                 .delete(endpoint);
     }
 
     public Response sendPutRequest(Object body, String endpoint) {
-        return given()
-                .contentType(ContentType.JSON)
+        return given().contentType(ContentType.JSON)
                 .header("Authorization", "Bearer ca0b2430-524c-48cd-8cca-765216212f47")
                 .when()
                 .body(body)
@@ -93,8 +88,7 @@ public class BaseAPITest {
     }
 
     public Response sendGetByNameRequest(String endpoint, Object name) {
-        return given()
-                .contentType(ContentType.JSON)
+        return given().contentType(ContentType.JSON)
                 .header("Authorization", "Bearer ca0b2430-524c-48cd-8cca-765216212f47")
                 .queryParam("filter.eq.name", name)
                 .queryParam("share", false)

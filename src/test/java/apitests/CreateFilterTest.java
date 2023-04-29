@@ -11,15 +11,13 @@ public class CreateFilterTest extends BaseAPITest {
 
     @Test
     public void checkStatusCodePostTest() {
-        response.then().statusCode(HttpStatus.SC_CREATED);
+        response.then()
+                .statusCode(HttpStatus.SC_CREATED);
     }
 
     @Test
     public void checkFilterCreatedTest() {
-         message = response.as(ResponseMessage.class);
-        assertThat(
-                message.getId(),
-                equalTo(id)
-        );
+        message = response.as(ResponseMessage.class);
+        assertThat(message.getId(), equalTo(id));
     }
 }
