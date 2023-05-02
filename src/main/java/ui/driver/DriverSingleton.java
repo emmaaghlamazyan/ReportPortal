@@ -1,6 +1,7 @@
 package ui.driver;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class DriverSingleton {
 
@@ -10,19 +11,11 @@ public class DriverSingleton {
     }
 
     public static WebDriver getDriver() {
-        DriverDecorator decorator;
         if (null == driver) {
-            switch (System.getProperty("browser", "chrome")) {
-                case "firefox": {
-                    decorator = new FirefoxDriverCreator();
-                    break;
-                }
-                default: {
-                    decorator = new ChromeDriverCreator();
-                }
-            }
-            driver = decorator.createWebDriver();
-            driver.manage().window().maximize();
+            driver = new ChromeDriver();
+            driver.manage()
+                    .window()
+                    .maximize();
         }
         return driver;
     }

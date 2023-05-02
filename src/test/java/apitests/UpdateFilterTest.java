@@ -8,17 +8,20 @@ import api.Order;
 import api.ResponseMessage;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.http.HttpStatus;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
+import org.junit.jupiter.api.BeforeAll;
 import org.testng.annotations.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.testng.annotations.DataProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class UpdateFilterTest extends BaseAPITest {
 
-    @BeforeClass
-    public void updateFilter() {
+    @BeforeAll
+    public static void updateFilter() {
         ArrayList<Condition> conditions = new ArrayList<>();
         conditions.add(new Condition.ConditionBuilder().setCondition("cnt")
                                .setFilteringField("name")
@@ -45,17 +48,19 @@ public class UpdateFilterTest extends BaseAPITest {
                 .statusCode(HttpStatus.SC_OK);
     }
 
-    @DataProvider
-    public Object[][] invalidId() {
-        return new Object[][]{
-                {RandomUtils.nextInt()},
-                {null}};
-    }
+
 
     @Test
     public void checkResponseMessagePutTest() {
         message = response.as(ResponseMessage.class);
         assertThat(message.getMessage(), equalTo("User filter with ID = '" + id + "' successfully updated."));
+    }
+
+    @DataProvider
+    public Object[][] invalidId() {
+        return new Object[][]{
+                {RandomUtils.nextInt()},
+                {null}};
     }
 
     @Test(dataProvider = "invalidId")
