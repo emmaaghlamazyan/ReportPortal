@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="My Test Suite" parallel="methods" thread-count="2">
+    <listeners>
+        <listener class-name="com.epam.reportportal.testng.ReportPortalTestNGListener" />
+    </listeners>
+    <test name="My Test">
+        <packages>
+            <package name="apitests" />
+        </packages>
+    </test>
+</suite>
