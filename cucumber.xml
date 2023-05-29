@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="BDD Tests" parallel="methods" thread-count="2">
+    <test name="BDD Tests">
+        <classes>
+            <class name="runner.CucumberTest"/>
+        </classes>
+    </test>
+</suite>
