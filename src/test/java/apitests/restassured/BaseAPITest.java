@@ -1,4 +1,4 @@
-package apitests;
+package apitests.restassured;
 
 import java.util.ArrayList;
 

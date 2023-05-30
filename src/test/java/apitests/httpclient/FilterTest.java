@@ -19,14 +19,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class FilterTest {
-    protected static final String filterName = "Filter" + System.currentTimeMillis();
+    protected String filterName;
     protected static String projectName = "myproject";
     protected HttpClient httpClient;
     protected HttpPost requestPost;
@@ -37,8 +37,9 @@ public class FilterTest {
     protected String endpointUrl = "http://localhost:8080/api/v1/" + projectName;
     protected int id;
 
-    @BeforeClass
+    @BeforeMethod
     public void createFilter() throws IOException {
+        filterName = "Filter" + System.currentTimeMillis();
         httpClient = HttpClientBuilder.create()
                 .build();
         requestPost = new HttpPost(endpointUrl + "/filter");
@@ -48,16 +49,16 @@ public class FilterTest {
                 "{\"conditions\":[" + "{\"condition\":\"cnt\",\"filteringField\":\"name\",\"value\":\"value\"}" + "],\"description\":\"description\"," + "\"name\":\"" + filterName + "\"," + "\"orders\":[{\"sortingColumn\":\"startTime\",\"asc\":true}]," + "\"share\":true,\"type\":\"launch\",\"content\":null,\"page\":null}"));
         response = httpClient.execute(requestPost);
         HttpEntity entity = response.getEntity();
-        InputStream is = entity.getContent(); // Create an InputStream with the response
+        InputStream is = entity.getContent();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
         StringBuilder sb = new StringBuilder();
         String line = null;
-        while ((line = reader.readLine()) != null) // Read line by line
+        while ((line = reader.readLine()) != null)
         {
             sb.append(line + "\n");
         }
 
-        id = Integer.parseInt(sb.substring(6, 8));
+        id = Integer.parseInt(sb.substring(6, 9));
     }
 
     @Test
@@ -71,7 +72,6 @@ public class FilterTest {
         httpClient = HttpClientBuilder.create()
                 .build();
         List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("filter.eq.name", filterName));
         params.add(new BasicNameValuePair("share", "false"));
 
         String queryString = "";

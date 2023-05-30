@@ -1,4 +1,4 @@
-package apitests;
+package apitests.restassured;
 
 import java.util.ArrayList;
 
@@ -9,10 +9,10 @@ import api.ResponseMessage;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
-import org.testng.annotations.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -48,8 +48,6 @@ public class UpdateFilterTest extends BaseAPITest {
                 .statusCode(HttpStatus.SC_OK);
     }
 
-
-
     @Test
     public void checkResponseMessagePutTest() {
         message = response.as(ResponseMessage.class);
@@ -58,9 +56,7 @@ public class UpdateFilterTest extends BaseAPITest {
 
     @DataProvider
     public Object[][] invalidId() {
-        return new Object[][]{
-                {RandomUtils.nextInt()},
-                {null}};
+        return new Object[][]{{RandomUtils.nextInt()}, {null}};
     }
 
     @Test(dataProvider = "invalidId")
