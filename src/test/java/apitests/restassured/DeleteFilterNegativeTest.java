@@ -1,4 +1,4 @@
-package apitests;
+package apitests.restassured;
 
 import api.ResponseMessage;
 import org.apache.commons.lang3.RandomUtils;
@@ -6,7 +6,6 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import org.testng.annotations.BeforeClass;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

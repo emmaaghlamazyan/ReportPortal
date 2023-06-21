@@ -1,4 +1,4 @@
-package apitests;
+package apitests.restassured;
 
 import api.Root;
 import org.apache.http.HttpStatus;
