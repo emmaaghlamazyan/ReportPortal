@@ -1,24 +1,27 @@
 package uitests;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.asserts.SoftAssert;
-import ui.driver.DriverSingleton;
-import ui.pages.HomePage;
+import ui.driver.DriverCreator;
+import ui.pages.FilterPage;
+import ui.pages.LoginPage;
 import utils.TestListener;
 
 @Listeners(TestListener.class)
 public class BaseUITest {
     protected WebDriver driver;
     protected SoftAssert softAssert;
-    protected Logger log = LogManager.getRootLogger();
-    protected HomePage homePage;
+    protected LoginPage loginPage;
+    protected FilterPage filterPage;
 
     @BeforeClass(alwaysRun = true)
-    public void setUpAndLogin() {
-        driver = DriverSingleton.getDriver();
+    public void setUp() {
+        softAssert = new SoftAssert();
+        driver = DriverCreator.getDriver();
+        driver.get("");
+        filterPage = new FilterPage(driver);
+        loginPage = new LoginPage(driver);
     }
 }
