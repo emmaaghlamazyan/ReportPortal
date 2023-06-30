@@ -1,6 +1,9 @@
 package ui.pages;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class HomePage extends BasePage {
 
@@ -8,9 +11,15 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    public void openFilters() {
+    @FindBy(xpath = "//span[text()='Filters']/parent::span")
+    private WebElement filters;
+
+    public void openFiltersPage() {
+        filters.click();
     }
 
-    public void clickOnAddFilter() {
+    public void acceptAlert() {
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
     }
 }
